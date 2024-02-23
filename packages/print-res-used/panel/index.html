@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <title>打印节点引用资源相对路径</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            margin: 10px;
+        }
+        .container{
+            text-align: center;
+            margin:0 auto;
+        }
+
+        #content {
+            font-size: small;
+            line-height:200%;
+            width:100%;
+            min-width: 600px;
+            height: 95%;
+        }
+        input,textarea{
+            padding:8px;
+        }
+        input:focus,textarea:focus{
+            border: lightblue!important;
+            padding:10px;
+        }
+        .header{
+            width:560px;
+            margin:0 auto 20px;
+        }
+        .header p{display: inline-block;}
+        #btn{
+            display: inline-block;
+            margin-left: 20px;
+        }
+        p.items{
+            white-space: nowrap;
+        }
+        p.items input{
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <p>递归查找节点引用的图片资源相对路径和该资源的所有引用情况</p>
+            <p>
+                排除字段: <input type="text" size="50" id='filter' placeholder="请输入排除字段"> </input>
+            </p>
+            <button id="btn">开始打印</button>
+        </div>
+        
+        <p class="items">
+            根节点: <input readonly="readonly" size="10" id="root"></input>
+            总节点数: <input readonly="readonly" size="5" id="total"></input>
+            引用资源节点数: <input readonly="readonly" size="5" id="spf"></input>
+            过滤后引用资源节点数: <input readonly="readonly" size="5" id="after"></input>
+            空Sprite节点数: <input readonly="readonly" size="5" id="spfnull"></input>
+        </p>
+        <p>
+            <textarea rows="30" cols="120" id="content"></textarea>
+        </p>
+    </div>
+
+    <script>
+        let btn = document.getElementById('btn');
+        btn.addEventListener('click', () => {
+            let input = document.getElementById('filter');
+            let textArea = document.getElementById('content');
+            let ttotal = document.getElementById("total");
+            let troot = document.getElementById("root");
+            let tspf = document.getElementById("spf");
+            let tspfnull = document.getElementById("spfnull");
+            let tafter = document.getElementById("after");
+            Editor.Ipc.sendToMain("print-res-used:panelPrint", input.value, (err, paths, root, total, spf, spfnull, realCount) => {
+                textArea.value = paths;
+                troot.value = root;
+                ttotal.value = total;
+                tspf.value = spf;
+                tspfnull.value = spfnull;
+                tafter.value = realCount;
+            }, 300000);
+        });
+
+    </script>
+</body>
+
+</html>

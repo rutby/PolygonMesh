@@ -1,0 +1,20 @@
+{
+	"name": "print-res-used",
+	"version": "0.0.1",
+	"description": "递归打印当前选中的节点以及子节点引用的资源的相对路径",
+	"author": "xujiawei",
+	"main": "main.js",
+	"main-menu": {
+		"Tools/PrintNodeResUsed": {
+			"message": "print-res-used:print"
+		}
+	},
+	"scene-script": "scene.js",
+	"panel": {
+		"main": "panel/index.html",
+		"type": "simple",
+		"title": "Simple Panel",
+		"width": 900,
+		"height": 700
+	}
+}

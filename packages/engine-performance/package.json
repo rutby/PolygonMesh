@@ -1,0 +1,20 @@
+{
+  "name": "engine-performance",
+  "version": "0.0.1",
+  "description": "bi for cocos editor",
+  "author": "zdy",
+  "main": "main.js",
+  "main-menu": {
+    "i18n:MAIN_MENU.package.title/EngineBI/EnableBI": {
+      "message": "engine-performance:enable-bi"
+    },
+    "i18n:MAIN_MENU.package.title/EngineBI/DisableBI": {
+      "message": "engine-performance:disable-bi"
+    }
+  },
+  "dependencies": {
+    "node-machine-id": "^1.1.12",
+    "systeminformation": "^5.12.13",
+    "xmlhttprequest": "^1.8.0"
+  }
+}

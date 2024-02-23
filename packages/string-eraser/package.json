@@ -1,0 +1,13 @@
+{
+	"name": "string-eraser",
+	"version": "0.0.1",
+	"description": "删除当前打开的prefab或者是scene中存在的非法文本",
+	"author": "make",
+	"main": "main.js",
+	"main-menu": {
+		"Tools/EraseStrings": {
+			"message": "string-eraser:start"
+		}
+	},
+	"scene-script": "scene.js"
+}

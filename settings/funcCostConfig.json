@@ -1,0 +1,122 @@
+{
+    "optimizeTable": {
+        "_uuidToImportPathNoExt cache": {
+            "turnOn": true,
+            "description": "缓存字符串拼接结果，减少获取uuid到路径的耗时。资源查询耗时相关"
+        },
+        "compile-project.rebuildIndex fileSync": {
+            "turnOn": true,
+            "description": "使用fast-glob替换glob。脚本变化的耗时相关，预期优化1.5s->300ms",
+            "validate": false
+        },
+        "compile-project.copyAllImportsToSrc fileSync": {
+            "turnOn": true,
+            "description": "使用fast-glob替换glob。和启动时脚本耗时相关。预期优化1.5s->300ms",
+            "validate": false
+        },
+        "module.compileFinished findIndex": {
+            "turnOn": true,
+            "description": "提前构建查找map，避免数组反复findIndex双重循环。和脚本变化的耗时相关，预期优化2.5s->40ms",
+            "validate": false
+        },
+        "writeAssets filter result.some": {
+            "turnOn": true,
+            "description": "Array.some调整判断逻辑顺序，循环从2.7亿次减少到2百万次，预计编辑器启动浏览器中的resource writeAssets耗时从27s->2s"
+        },
+        "writeAssets cache result": {
+            "turnOn": true,
+            "description": "缓存数据，热启动编辑器预览耗时优化"
+        },
+        "tasks.queryAssets": {
+            "turnOn": true,
+            "description": "用fast-glob减少meta获取耗时，并且缓存可复用的查询结果。资源面板搜索耗时相关，预期优化主进程查找8s->1s"
+        },
+        "module.transform offsetSourceMap": {
+            "turnOn": true,
+            "description": "有猜测成份；source-map记录格式在需要偏移行时直接加\";\"即可，不用解析出来，预期优化主进程启动 walk 3000个文件总耗时减少14s，43s->29s",
+            "validate": false
+        },
+        "tasks.attachMountPath sync": {
+            "turnOn": true,
+            "description": "fast-glob提前遍历信息作为缓存，以及记录文件json信息缓存。预期优化主进程启动 资源refresh耗时减少3s",
+            "validate": false
+        },
+        "tasks.attachMountPath cacheJson": {
+            "turnOn": true,
+            "description": "json文件缓存。预期优化主进程耗时减少3s"
+        },
+        "_removeUnusedImportFiles fast-glob only file": {
+            "turnOn": true,
+            "description": "逻辑里不用检查目录，所以直接fast-glob设置成跳过目录遍历，预计少判断16万次路径为文件夹，耗时少6s"
+        },
+        "_taskWatch record timestamp": {
+            "turnOn": true,
+            "description": "记录刷新时间戳，用于避免文件遗漏问题"
+        },
+        "_taskWatch use timestamp": {
+            "turnOn": true,
+            "description": "将时间戳信息用作文件刷新依据，用于补充刷新被遗漏的文件"
+        },
+        "_taskWatch skip watchOn": {
+            "turnOn": false,
+            "description": "跳过watchOn遍历，仅以数据库为标准进行资源变化判断"
+        },
+        "isWriteFileLog": {
+            "turnOn": true,
+            "description": "此项不是优化项，开启时会写文件日志到本地"
+        },
+        "isShowEditorLog": {
+            "turnOn": true,
+            "description": "开启时，会将指定显示到编辑器里的日志"
+        },
+        "alwaysShowEditorLog": {
+            "turnOn": false,
+            "description": "开启后，所有优化调试信息将显示到编辑器里的日志"
+        },
+        "gulp-build.startSwithArgs parallelBuild": {
+            "turnOn": true,
+            "description": "构建优化，并行compile和build-assets任务"
+        },
+        "compile-worker.queryBundleScript results.filter": {
+            "turnOn": true,
+            "description": "构建优化，compile-worker工作进程耗时远程对象耗时优化，减少6s"
+        },
+        "compile-worker.getScriptsTask bundleContains": {
+            "turnOn": true,
+            "description": "构建优化，compile-worker工作进程耗时优化，预期耗时减少30s"
+        },
+        "build-asset.constructor existsByUuid": {
+            "turnOn": false,
+            "description": "构建优化，提前缓存uuid2path"
+        },
+        "texture-packer.queryCache": {
+            "turnOn": true,
+            "description": "构建优化，迁移的已有项目，pac查询sprite-frame缓存"
+        },
+        "texture-packer.queryAssets": {
+            "turnOn": true,
+            "description": "构建优化，资源搜索缓存在worker中使用",
+            "validate": false
+        },
+        "texture-packer.needPack": {
+            "turnOn": true,
+            "description": "构建优化，needPack判断优化，预期耗时减少60s"
+        },
+        "group-strategies.splitGroup intersection": {
+            "turnOn": true,
+            "description": "构建优化，group策略优化，用手工实现的数组求交集替换lodash接口"
+        },
+        "gulp-build.printCalcHash": {
+            "turnOn": true,
+            "description": "此项不是优化项，开启时打印构建中计算的完整hash值，用于检查5位hash碰撞情况"
+        },
+        "cocos.trackException": {
+            "turnOn": true,
+            "description": "此项不是优化项，作为trackEvent开关用，turn时跳过发送"
+        },
+        "metrics.trackException": {
+            "turnOn": true,
+            "description": "此项不是优化项，作为trackEvent开关用，turn时跳过发送"
+        }
+    }
+}

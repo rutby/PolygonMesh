@@ -1,0 +1,7 @@
+{
+  "name": "gitbranch-watcher",
+  "version": "0.0.1",
+  "description": "当git分支变化的时候退出编辑器，避免产生uuid collison",
+  "author": "dj",
+  "main": "main.js"
+}

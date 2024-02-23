@@ -1,0 +1,13 @@
+{
+  "name": "homemap-preview-scene",
+  "version": "0.0.1",
+  "description": "生成城内的预览场景",
+  "author": "liuqiang",
+  "main": "main.js",
+  "main-menu": {
+    "Tools/HomeMapPreview": {
+      "message": "homemap-preview-scene:start"
+    }
+  },
+  "scene-script": "scene.js"
+}

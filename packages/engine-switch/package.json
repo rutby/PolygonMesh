@@ -1,0 +1,19 @@
+{
+  "name": "engine-switch",
+  "version": "0.0.1",
+  "description": "switch for cocos editor",
+  "author": "zdy",
+  "main": "main.js",
+  "main-menu": {
+    "i18n:MAIN_MENU.package.title/EngineSwitch/ShowSwitchPanel": {
+      "message": "engine-switch:show-switch-panel"
+    }
+  },
+  "panel": {
+    "main": "panel/index.js",
+    "type": "dockable",
+    "title": "优化开关",
+    "width": 400,
+    "height": 300
+  }
+}

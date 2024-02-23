@@ -1,0 +1,8 @@
+#!/bin/sh
+
+BASEDIR=$(dirname $0)
+echo $BASEDIR
+export MAGICK_HOME="$BASEDIR/ImageMagick-7.0.10"
+export DYLD_LIBRARY_PATH="$MAGICK_HOME/lib/"
+
+$MAGICK_HOME/bin/composite "$@"
