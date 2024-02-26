@@ -5,21 +5,28 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable require-jsdoc */
 
+import { PrimitiveUtils } from "../Utils/PrimitiveUtils";
+
 const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 @ccclass
 @executeInEditMode
 @menu("Tool/PolyMeshGenerator")
 export default class PolyMeshGenerator extends cc.Component {
-    // @property(cc.PolygonCollider) public poly: cc.PolygonCollider = null;
+    @property(cc.PolygonCollider) public poly: cc.PolygonCollider = null;
 
 	//================================================ cc.Component
 	public start(): void {
         this.createMeshRenderer0();
 	}
 
+    private _time: number = 0;
     protected update(dt: number): void {
         if (CC_EDITOR) {
-            this.createMeshRenderer0();
+            this._time += dt;
+            if (this._time > 0.1) {
+                this._time = 0;
+                this.createMeshRenderer0();
+            }
         }
     }
 
@@ -32,63 +39,55 @@ export default class PolyMeshGenerator extends cc.Component {
         let uv = [];
         let normals = [];
 
-        let faceNormals = [
-            [  0,  0,  1 ], // FRONT
-            [  0,  0, -1 ], // BACK
-            [  0,  1,  0 ], // TOP
-            [  0, -1,  0 ], // BOTTOM
-            [  1,  0,  0 ], // RIGHT
-            [ -1,  0,  0 ]  // LEFT
-        ];
-
-        /**
-         * uv3 uv4 uv5
-         * uv0 uv1 uv2
-         */
-
         indices = indices.concat([ 
-            // 0, 1, 2, 0, 2, 3,
-            0, 1, 3, 1, 2, 3,
-            1, 5, 2, 5, 7, 2,
-            // 8, 9, 10, 8, 10, 11,
+            0, 1, 2, 2, 3, 0, // front
+            4, 7, 6, 6, 5, 4, // back
+            8, 10, 9, 9, 10, 11, // front
         ]);
 
-        let vertsr = [
-            cc.v3(0, 0, 0),
-            cc.v3(1, 0, 0),
-            cc.v3(1, 1, 0),
-            cc.v3(0, 1, 0),
-            cc.v3(0, 0, 1),
-            cc.v3(1, 0, 1),
+        let corners = [
+            cc.v3(-1, -1, 1),
+            cc.v3(1, -1, 1),
             cc.v3(1, 1, 1),
-            cc.v3(0, 1, 1),
+            cc.v3(-1, 1, 1),
+            cc.v3(-1, -1, -1),
+            cc.v3(1, -1, -1),
+            cc.v3(1, 1, -1),
+            cc.v3(-1, 1, -1),
         ]
 
-        verts.push(vertsr[0]);
-        verts.push(vertsr[1]);
-        verts.push(vertsr[2]);
-        verts.push(vertsr[3]);
+        verts = [
+            corners[0],
+            corners[1],
+            corners[2],
+            corners[3],
 
-        verts.push(vertsr[1]);
-        verts.push(vertsr[5]);
-        verts.push(vertsr[2]);
-        verts.push(vertsr[7]);
+            corners[4],
+            corners[5],
+            corners[6],
+            corners[7],
+
+            corners[0],
+            corners[1],
+            corners[4],
+            corners[5],
+        ]
 
         uv = uv.concat([
-            cc.v3(0, 0, 0),
-            cc.v3(0, 0, 0),
-            cc.v3(0, 0, 0),
-            cc.v3(0, 0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
 
-            cc.v3(0, 0, 0),
-            cc.v3(0, 0, 0),
-            cc.v3(0, 0, 0),
-            cc.v3(0, 0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
 
-            // cc.v3(0, 0, 0),
-            // cc.v3(0, 0, 0),
-            // cc.v3(0, 0, 0),
-            // cc.v3(0, 0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
+            cc.v2(0, 0),
         ]);
 
         normals = normals.concat([
@@ -97,10 +96,26 @@ export default class PolyMeshGenerator extends cc.Component {
             cc.v3(0, 0, 1),
             cc.v3(0, 0, 1),
 
-            cc.v3(1, 0, 0),
-            cc.v3(1, 0, 0),
-            cc.v3(1, 0, 0),
-            cc.v3(1, 0, 0),
+            // cc.v3(1, 0, 0),
+            // cc.v3(1, 0, 0),
+            // cc.v3(1, 0, 0),
+            // cc.v3(1, 0, 0),
+
+            cc.v3(0, 0, -1),
+            cc.v3(0, 0, -1),
+            cc.v3(0, 0, -1),
+            cc.v3(0, 0, -1),
+
+
+            // cc.v3(0, 0, 1),
+            // cc.v3(0, 0, 1),
+            // cc.v3(0, 0, 1),
+            // cc.v3(0, 0, 1),
+
+            cc.v3(0, -1, 0),
+            cc.v3(0, -1, 0),
+            cc.v3(0, -1, 0),
+            cc.v3(0, -1, 0),
 
             // cc.v3(0, 1, 0),
             // cc.v3(0, 1, 0),
@@ -109,16 +124,20 @@ export default class PolyMeshGenerator extends cc.Component {
         ]);
 
         /** 生成mesh */
-        // let mesh = this.newMesh(indices, verts, uv, normals);
-        // let meshRenderer = this.getComponent(cc.MeshRenderer);
-        // meshRenderer.mesh = mesh;
+        this.getComponent(cc.MeshRenderer).mesh = this.newMesh(indices, verts, uv, normals);
 
-        let box = cc.primitive.box();
-        let mesh = this.newMesh(box.indices, box.positions, box.uvs, box.normals);
-        console.log(mesh);
-        let meshRenderer = this.getComponent(cc.MeshRenderer);
-        console.log(meshRenderer.mesh);
-        meshRenderer.mesh = mesh;
+        // cc.log('mesh0', meshRenderer.mesh)
+        // let box = PrimitiveUtils.box();
+        // this.getComponent(cc.MeshRenderer).mesh = this.newMesh(box.indices, box.positions, box.uvs, box.normals);
+        // cc.log('mesh1', meshRenderer.mesh)
+
+        /** test */
+        let polys: cc.Vec2[] = [];
+        for(let point of this.poly.points) {
+            polys.push(cc.v2(point.x / 100, point.y / 100));
+        }
+        let model = PrimitiveUtils.poly(polys);
+        this.getComponent(cc.MeshRenderer).mesh = this.newMesh(model.indices, model.positions, model.uvs, model.normals);
     }
 
     private newMesh(indices, verts, uv, normals): cc.Mesh {
@@ -133,8 +152,8 @@ export default class PolyMeshGenerator extends cc.Component {
         vfmtMesh.name = 'vfmtPosUvNormal';
 
 		mesh.init(vfmtMesh, verts.length);
-		mesh.setVertices(gfx.ATTR_POSITION, verts);
         mesh.setIndices(indices, 0);
+		mesh.setVertices(gfx.ATTR_POSITION, verts);
         mesh.setVertices(gfx.ATTR_UV0, uv);
         mesh.setVertices(gfx.ATTR_NORMAL, normals);
 		mesh.setPrimitiveType(gfx.PT_TRIANGLES, 0);
