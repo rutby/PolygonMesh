@@ -139,15 +139,9 @@ export class PrimitiveUtils {
         let corners0 = [];
         let corners1 = [];
         for(let meshPoly of meshPolys) {
-            cc.log('meshPoly', meshPoly.vert.x, meshPoly.vert.y);
             corners0.push(cc.v3(meshPoly.vert.x, meshPoly.vert.y, +height/2));
             corners1.push(cc.v3(meshPoly.vert.x, meshPoly.vert.y, -height/2));
         }
-
-        // for(let poly of polys) {
-        //     corners0.push(cc.v3(poly.x, poly.y, +height/2));
-        //     corners1.push(cc.v3(poly.x, poly.y, -height/2));
-        // }
         let corners: cc.Vec3[] = corners0.concat(corners1);
 
         /** 上下两个面 */
@@ -169,6 +163,10 @@ export class PrimitiveUtils {
 
             planes[0].normals.push(cc.v3(0, 0, 1));
             planes[1].normals.push(cc.v3(0, 0, -1));
+
+            // /** 法线 - 圆角 */
+            // planes[0].normals.push(cc.v3(meshPolys[i].normal.x, meshPolys[i].normal.y, 0));
+            // planes[1].normals.push(cc.v3(meshPolys[i].normal.x, meshPolys[i].normal.y, 0));
         };
 
         /** 其他面 */
@@ -194,13 +192,12 @@ export class PrimitiveUtils {
             // plane.normals = [normal, normal, normal, normal];
 
             /** 法线 - 圆角 */
-            let p0 = corners[plane.order[0]];
-            let p1 = corners[plane.order[1]];
-            let p2 = corners[plane.order[2]];
-            let vec0 = p0.sub(p1);
-            let vec1 = p2.sub(p1);
-            let normal = vec0.cross(vec1).normalize().negate();
-            plane.normals = [normal, normal, normal, normal];
+            plane.normals = [
+                cc.v3(meshPolys[ci0].normal.x, meshPolys[ci0].normal.y, 0),
+                cc.v3(meshPolys[ci1].normal.x, meshPolys[ci1].normal.y, 0),
+                cc.v3(meshPolys[ci0].normal.x, meshPolys[ci0].normal.y, 0),
+                cc.v3(meshPolys[ci1].normal.x, meshPolys[ci1].normal.y, 0),
+            ];
 
             planes.push(plane);
         }
