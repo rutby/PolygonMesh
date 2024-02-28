@@ -126,7 +126,9 @@ export class PrimitiveUtils {
         };
     }
 
-    public static poly(polys: cc.Vec2[], height = 1) {
+    public static poly(polys: cc.Vec2[], height = 1, uSize = 1, vSize = 2) {
+        polys = this._smoothPoly(polys, 0.2, 1);
+        // this._smoothPoly(polys, 0.2, 1);
         /** 顶点 */
         let corners0 = [];
         let corners1 = [];
@@ -189,6 +191,7 @@ export class PrimitiveUtils {
 
         for(let pi = 0; pi < planes.length; pi++) {
             let plane = planes[pi];
+
             for(let vi = 0; vi < plane.verts.length; vi++) {
                 let corner = corners[plane.verts[vi]];
                 let normal = plane.normals[vi];
@@ -213,5 +216,39 @@ export class PrimitiveUtils {
             uvs           : uvs,
             indices       : indices,
         };
+    }
+
+    //================================================ utils
+    private static _smoothPoly(polys: cc.Vec2[], radius: number, count: number): cc.Vec2[] {
+        let result = [];
+
+        for(let i = 0, len = polys.length; i < len; i++) {
+            let p0 = polys[i];
+            let pu = polys[(i + 1) % len];
+            let pv = polys[(i - 1 + len) % len];
+            let vu = pu.sub(p0);
+            let vv = pv.sub(p0);
+            let radian = vv.angle(vu) / 2;
+            let dis = radius / Math.sin(radian);
+            let vin = vu.add(vv).normalize();
+            let vi = vin.mul(dis);
+            let posInner = p0.add(vi);
+
+            let u = vu.mul(vi.dot(vu));
+            let v = vv.mul(vi.dot(vv));
+            let seg0 = [];
+            let seg1 = [];
+            for(let ic = 1; ic <= count; ic++) {
+                let ps0 = p0.add(u.mul(ic / count));
+                let ps1 = p0.add(v.mul(ic / count));
+                seg0.push(ps0);
+                seg1.push(ps1);
+            }
+            result = result.concat(seg1.reverse());
+            result.push(p0);
+            result = result.concat(seg0);
+        }
+
+        return result;
     }
 }
