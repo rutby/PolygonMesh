@@ -811,11 +811,6 @@
         "__type__": "cc.Vec2",
         "x": 50,
         "y": 50
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -50,
-        "y": 50
       }
     ],
     "_id": "41OTxrkAVMbaI/LP3qP8rL"

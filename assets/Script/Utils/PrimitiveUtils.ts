@@ -18,6 +18,11 @@ class MeshPlane {
     // public uvs: cc.Vec2[] = [];
 }
 
+interface MeshPoly {
+    vert: cc.Vec2,
+    normal: cc.Vec2,
+}
+
 export class PrimitiveUtils {
     public static box(width = 1, height = 1, length = 1, segmentCount = 1) {
         let ws = segmentCount;
@@ -127,15 +132,22 @@ export class PrimitiveUtils {
     }
 
     public static poly(polys: cc.Vec2[], height = 1, uSize = 1, vSize = 2) {
-        polys = this._smoothPoly(polys, 0.2, 1);
-        // this._smoothPoly(polys, 0.2, 1);
+        let meshPolys = this._smoothPoly(polys, 0.2, 1);
+        let polyLen = meshPolys.length;
+
         /** 顶点 */
         let corners0 = [];
         let corners1 = [];
-        for(let point of polys) {
-            corners0.push(cc.v3(point.x, point.y, +height/2));
-            corners1.push(cc.v3(point.x, point.y, -height/2));
+        for(let meshPoly of meshPolys) {
+            cc.log('meshPoly', meshPoly.vert.x, meshPoly.vert.y);
+            corners0.push(cc.v3(meshPoly.vert.x, meshPoly.vert.y, +height/2));
+            corners1.push(cc.v3(meshPoly.vert.x, meshPoly.vert.y, -height/2));
         }
+
+        // for(let poly of polys) {
+        //     corners0.push(cc.v3(poly.x, poly.y, +height/2));
+        //     corners1.push(cc.v3(poly.x, poly.y, -height/2));
+        // }
         let corners: cc.Vec3[] = corners0.concat(corners1);
 
         /** 上下两个面 */
@@ -143,16 +155,16 @@ export class PrimitiveUtils {
             new MeshPlane(),
             new MeshPlane(),
         ];
-        for(let i = 0; i < polys.length; i++) {
+        for(let i = 0; i < polyLen; i++) {
             planes[0].verts.push(i);
-            planes[1].verts.push(i + polys.length);
+            planes[1].verts.push(i + polyLen);
 
             if (i == 0) {
                 planes[0].order.push(0);
-                planes[1].order.push(polys.length);
+                planes[1].order.push(polyLen);
             } else {
                 planes[0].order.push(i);
-                planes[1].order.push(polys.length - i + polys.length);
+                planes[1].order.push(polyLen - i + polyLen);
             }
 
             planes[0].normals.push(cc.v3(0, 0, 1));
@@ -160,11 +172,11 @@ export class PrimitiveUtils {
         };
 
         /** 其他面 */
-        for(let i = 0; i < polys.length; i++) {
+        for(let i = 0; i < polyLen; i++) {
             let ci0 = i;
-            let ci1 = (i + 1) % polys.length;
-            let ci2 = ci0 + polys.length;
-            let ci3 = ci1 + polys.length;
+            let ci1 = (i + 1) % polyLen;
+            let ci2 = ci0 + polyLen;
+            let ci3 = ci1 + polyLen;
             let offset = corners.length;
 
             corners.push(corners[ci0], corners[ci1], corners[ci2], corners[ci3]);
@@ -172,6 +184,16 @@ export class PrimitiveUtils {
             plane.verts = [offset, offset + 1, offset + 2, offset + 3];
             plane.order = [offset, offset + 2, offset + 3, offset + 1];
             
+            /** 法线 - 垂直面 */
+            // let p0 = corners[plane.order[0]];
+            // let p1 = corners[plane.order[1]];
+            // let p2 = corners[plane.order[2]];
+            // let vec0 = p0.sub(p1);
+            // let vec1 = p2.sub(p1);
+            // let normal = vec0.cross(vec1).normalize().negate();
+            // plane.normals = [normal, normal, normal, normal];
+
+            /** 法线 - 圆角 */
             let p0 = corners[plane.order[0]];
             let p1 = corners[plane.order[1]];
             let p2 = corners[plane.order[2]];
@@ -219,36 +241,44 @@ export class PrimitiveUtils {
     }
 
     //================================================ utils
-    private static _smoothPoly(polys: cc.Vec2[], radius: number, count: number): cc.Vec2[] {
-        let result = [];
+    private static _smoothPoly(polys: cc.Vec2[], roundness: number, count: number): MeshPoly[] {
+        let verts: MeshPoly[] = [];
 
+        let trail = [];
         for(let i = 0, len = polys.length; i < len; i++) {
             let p0 = polys[i];
             let pu = polys[(i + 1) % len];
             let pv = polys[(i - 1 + len) % len];
-            let vu = pu.sub(p0);
-            let vv = pv.sub(p0);
+            let vu = pu.sub(p0).normalize();
+            let vv = pv.sub(p0).normalize();
             let radian = vv.angle(vu) / 2;
-            let dis = radius / Math.sin(radian);
+            let dis = roundness / Math.cos(radian);
             let vin = vu.add(vv).normalize();
             let vi = vin.mul(dis);
             let posInner = p0.add(vi);
 
             let u = vu.mul(vi.dot(vu));
             let v = vv.mul(vi.dot(vv));
-            let seg0 = [];
-            let seg1 = [];
+            let seg0: MeshPoly[] = [];
+            let seg1: MeshPoly[] = [];
             for(let ic = 1; ic <= count; ic++) {
                 let ps0 = p0.add(u.mul(ic / count));
                 let ps1 = p0.add(v.mul(ic / count));
-                seg0.push(ps0);
-                seg1.push(ps1);
-            }
-            result = result.concat(seg1.reverse());
-            result.push(p0);
-            result = result.concat(seg0);
-        }
 
-        return result;
+                seg0.push({ vert: ps0, normal: cc.v2(vu.y, -vu.x) });
+                seg1.push({ vert: ps1, normal: cc.v2(-vv.y, vv.x) });
+            }
+            seg1 = seg1.reverse();
+            if (i == 0) {
+                trail = seg1;
+            } else {
+                verts = verts.concat(seg1);
+            }
+            verts.push({ vert: p0, normal: vin.negate() });
+            verts = verts.concat(seg0);
+        }
+        verts = verts.concat(trail);
+
+        return verts;
     }
 }
