@@ -78,10 +78,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 28
+        "__id__": 26
       },
       {
-        "__id__": 29
+        "__id__": 27
       }
     ],
     "_prefab": null,
@@ -261,9 +261,6 @@
       },
       {
         "__id__": 21
-      },
-      {
-        "__id__": 26
       }
     ],
     "_active": true,
@@ -695,7 +692,7 @@
       "__id__": 5
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 15
@@ -762,7 +759,7 @@
     "_enabled": true,
     "_materials": [
       {
-        "__uuid__": "c4480a0a-6ac5-443f-8b40-361a14257fc8"
+        "__uuid__": "40a608c9-1214-46af-bba6-e2054ff2f1b5"
       }
     ],
     "_mesh": null,
@@ -802,48 +799,23 @@
     "points": [
       {
         "__type__": "cc.Vec2",
-        "x": -86,
-        "y": -161
+        "x": -50,
+        "y": -50
       },
       {
         "__type__": "cc.Vec2",
-        "x": 18,
-        "y": -140
+        "x": 50,
+        "y": -50
       },
       {
         "__type__": "cc.Vec2",
-        "x": 94,
-        "y": -81
+        "x": 50,
+        "y": 50
       },
       {
         "__type__": "cc.Vec2",
-        "x": 107,
-        "y": -4
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": 43,
-        "y": 79
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -110,
-        "y": 128
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -272,
-        "y": 54
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -265,
-        "y": -80
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -224,
-        "y": -137
+        "x": -50,
+        "y": 50
       }
     ],
     "_id": "41OTxrkAVMbaI/LP3qP8rL"
@@ -918,7 +890,7 @@
       "__id__": 5
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 20
@@ -1006,7 +978,7 @@
         "__id__": 22
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [],
     "_prefab": {
       "__id__": 25
@@ -1165,97 +1137,6 @@
     },
     "fileId": "",
     "sync": false
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "New Point Light",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 5
-    },
-    "_children": [],
-    "_active": false,
-    "_components": [
-      {
-        "__id__": 27
-      }
-    ],
-    "_prefab": null,
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_trs": {
-      "__type__": "TypedArray",
-      "ctor": "Float64Array",
-      "array": [
-        0.738,
-        1.501,
-        3.995,
-        0,
-        -0.7071067811865475,
-        0,
-        0.7071067811865476,
-        1,
-        1,
-        1
-      ]
-    },
-    "_eulerAngles": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": -90,
-      "z": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_is3DNode": true,
-    "_groupIndex": 0,
-    "groupIndex": 0,
-    "_id": "a9F+RfJYNOqqQ38AO6a+qn"
-  },
-  {
-    "__type__": "cc.Light",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 26
-    },
-    "_enabled": true,
-    "_type": 1,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_intensity": 1,
-    "_range": 1000,
-    "_spotAngle": 60,
-    "_spotExp": 1,
-    "_shadowType": 0,
-    "_shadowResolution": 1024,
-    "_shadowDarkness": 0.5,
-    "_shadowMinDepth": 1,
-    "_shadowMaxDepth": 1000,
-    "_shadowFrustumSize": 50,
-    "_shadowBias": 0.0005,
-    "_id": "1f4d3ZAb1IG5/XHIIHzgqD"
   },
   {
     "__type__": "cc.Canvas",

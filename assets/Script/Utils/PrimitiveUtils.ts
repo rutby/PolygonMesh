@@ -11,6 +11,13 @@ let c5 = new cc.Vec3();
 let c6 = new cc.Vec3();
 let c7 = new cc.Vec3();
 
+class MeshPlane {
+    public verts: number[] = [];
+    public order: number[] = [];
+    public normals: cc.Vec3[] = [];
+    // public uvs: cc.Vec2[] = [];
+}
+
 export class PrimitiveUtils {
     public static box(width = 1, height = 1, length = 1, segmentCount = 1) {
         let ws = segmentCount;
@@ -120,7 +127,6 @@ export class PrimitiveUtils {
     }
 
     public static poly(polys: cc.Vec2[], height = 1) {
-        //====================== top & bottom
         /** 顶点 */
         let corners0 = [];
         let corners1 = [];
@@ -130,50 +136,49 @@ export class PrimitiveUtils {
         }
         let corners: cc.Vec3[] = corners0.concat(corners1);
 
-        /** 面 & 绘制顺序 */
-        let planes: number[][] = [
-            [],
-            [],
-        ];
-        let orders = [
-            [0],
-            [0 + polys.length],
+        /** 上下两个面 */
+        let planes: MeshPlane[] = [
+            new MeshPlane(),
+            new MeshPlane(),
         ];
         for(let i = 0; i < polys.length; i++) {
-            planes[0].push(i);
-            planes[1].push(i + polys.length);
-        };
-        for(let i = 1; i < polys.length; i++) {
-            orders[0].push(i);
-            orders[1].push(polys.length - i + polys.length);
-        }
+            planes[0].verts.push(i);
+            planes[1].verts.push(i + polys.length);
 
-        //====================== side
+            if (i == 0) {
+                planes[0].order.push(0);
+                planes[1].order.push(polys.length);
+            } else {
+                planes[0].order.push(i);
+                planes[1].order.push(polys.length - i + polys.length);
+            }
+
+            planes[0].normals.push(cc.v3(0, 0, 1));
+            planes[1].normals.push(cc.v3(0, 0, -1));
+        };
+
+        /** 其他面 */
         for(let i = 0; i < polys.length; i++) {
             let ci0 = i;
             let ci1 = (i + 1) % polys.length;
             let ci2 = ci0 + polys.length;
             let ci3 = ci1 + polys.length;
-
             let offset = corners.length;
-            corners.push(corners[ci0], corners[ci1], corners[ci2], corners[ci3]);
-            planes.push([offset, offset + 1, offset + 2, offset + 3]);
-            orders.push([offset, offset + 2, offset + 3, offset + 1]);
-        }
 
-        //====================== generate
-        /** 法线 */
-        let planeNormals = [
-        ];
-        for(let order of orders) {
-            let p0 = corners[order[0]];
-            let p1 = corners[order[1]];
-            let p2 = corners[order[2]];
+            corners.push(corners[ci0], corners[ci1], corners[ci2], corners[ci3]);
+            let plane = new MeshPlane();
+            plane.verts = [offset, offset + 1, offset + 2, offset + 3];
+            plane.order = [offset, offset + 2, offset + 3, offset + 1];
             
+            let p0 = corners[plane.order[0]];
+            let p1 = corners[plane.order[1]];
+            let p2 = corners[plane.order[2]];
             let vec0 = p0.sub(p1);
             let vec1 = p2.sub(p1);
-            let normal = vec0.cross(vec1).normalize();
-            planeNormals.push(normal.negate());
+            let normal = vec0.cross(vec1).normalize().negate();
+            plane.normals = [normal, normal, normal, normal];
+
+            planes.push(plane);
         }
 
         /** 构建 */
@@ -181,21 +186,21 @@ export class PrimitiveUtils {
         let normals: number[] = [];
         let uvs: number[] = [];
         let indices: number[] = [];
+
         for(let pi = 0; pi < planes.length; pi++) {
             let plane = planes[pi];
-            let planeNormal = planeNormals[pi];
-            let order = orders[pi];
-            for(let cii = 0; cii < plane.length; cii++) {
-                let ci = plane[cii];
-                let corner = corners[ci];
+            for(let vi = 0; vi < plane.verts.length; vi++) {
+                let corner = corners[plane.verts[vi]];
+                let normal = plane.normals[vi];
+                let order = plane.order;
 
                 positions.push(corner.x, corner.y, corner.z);
                 uvs.push(0, 0);
-                normals.push(planeNormal.x, planeNormal.y, planeNormal.z);
+                normals.push(normal.x, normal.y, normal.z);
 
-                if (cii >= 2) {
-                    let ci2 = order[cii];
-                    let ci1 = order[cii - 1];
+                if (vi >= 2) {
+                    let ci2 = order[vi];
+                    let ci1 = order[vi - 1];
                     let ci0 = order[0];
                     indices.push(ci0, ci1, ci2);
                 }
