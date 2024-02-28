@@ -132,8 +132,8 @@ export class PrimitiveUtils {
         };
     }
 
-    public static poly(polys: cc.Vec2[], height = 1, uSize = 1, vSize = 2) {
-        let meshPolys = this._smoothPoly(polys, 0.2, 1);
+    public static poly(polys: cc.Vec2[], roundness = 0.2, height = 1) {
+        let meshPolys = this._smoothPoly(polys, roundness, 2);
         let polyLen = meshPolys.length;
 
         /** 顶点 */
@@ -254,29 +254,32 @@ export class PrimitiveUtils {
             let radius = dis * Math.sin(radian);
             let vin = vu.add(vv).normalize();
             let vi = vin.mul(dis);
-            let posInner = p0.add(vi);
+            let pi = p0.add(vi);
 
             let u = vu.mul(vi.dot(vu));
             let v = vv.mul(vi.dot(vv));
             let seg0: MeshPoly[] = [];
             let seg1: MeshPoly[] = [];
             for(let ic = 1; ic <= count; ic++) {
-                let ps0 = p0.add(u.mul(ic / count));
-                let ps1 = p0.add(v.mul(ic / count));
+                let ps0 = p0.lerp(p0.add(u), ic/count);
+                let ps1 = p0.lerp(p0.add(v), ic/count);
 
-                seg0.push({ vert: ps0, normal: cc.v2(vu.y, -vu.x), inner: posInner });
-                seg1.push({ vert: ps1, normal: cc.v2(-vv.y, vv.x), inner: posInner });
+                let normal0 = ps0.sub(pi).normalize();
+                let normal1 = ps1.sub(pi).normalize();
+
+                seg0.push({ vert: pi.add(normal0.mul(radius)), normal: normal0, inner: pi });
+                seg1.push({ vert: pi.add(normal1.mul(radius)), normal: normal1, inner: pi });
             }
             /** prev */
-            seg1 = seg1.reverse();
+            seg1.reverse();
             if (i == 0) {
                 trail = seg1;
             } else {
                 verts = verts.concat(seg1);
             }
             /** cuur */
-            let normal = vin.negate();
-            verts.push({ vert: posInner.add(normal.mul(radius)), normal: normal, inner: posInner });
+            let normal = vin.neg();
+            verts.push({ vert: pi.add(normal.mul(radius)), normal: normal, inner: pi });
             /** post */
             verts = verts.concat(seg0);
         }

@@ -13,6 +13,7 @@ const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 @menu("Tool/PolyMeshGenerator")
 export default class PolyMeshGenerator extends cc.Component {
     @property(cc.PolygonCollider) public poly: cc.PolygonCollider = null;
+    @property(cc.Float) public roundness: number = 0.2;
 
 	//================================================ cc.Component
 	public start(): void {
@@ -136,7 +137,7 @@ export default class PolyMeshGenerator extends cc.Component {
         for(let point of this.poly.points) {
             polys.push(cc.v2(point.x / 100, point.y / 100));
         }
-        let model = PrimitiveUtils.poly(polys);
+        let model = PrimitiveUtils.poly(polys, this.roundness);
         this.getComponent(cc.MeshRenderer).mesh = this.newMesh(model.indices, model.positions, model.uvs, model.normals);
     }
 
