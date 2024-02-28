@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.Material",
+  "_name": "custom-phong",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "44ca6aa1-2abd-4bfc-8eac-951dad7ea3b1"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "props": {
+        "diffuseColor": {
+          "__type__": "cc.Color",
+          "r": 80,
+          "g": 120,
+          "b": 110,
+          "a": 255
+        },
+        "emissiveColor": {
+          "__type__": "cc.Color",
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        },
+        "glossiness": 0.14,
+        "specularColor": {
+          "__type__": "cc.Color",
+          "r": 100,
+          "g": 100,
+          "b": 100,
+          "a": 255
+        }
+      },
+      "defines": {
+        "USE_EMISSIVE": false,
+        "USE_SPECULAR": true,
+        "USE_SPECULAR_TEXTURE": false
+      }
+    }
+  }
+}

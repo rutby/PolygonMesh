@@ -1,6 +1,6 @@
 {
   "ver": "1.1.3",
-  "uuid": "6de20a0e-3bba-4683-b8a0-e07c010e8a45",
+  "uuid": "4a8eb893-7487-4dfa-ab03-f3bdcbf78ec5",
   "importer": "fbx",
   "scaleFactor": 1,
   "boneCount": 0,
@@ -9,17 +9,17 @@
   "subMetas": {
     "buffer.bin": {
       "ver": "1.0.2",
-      "uuid": "4cfe4a9a-05ae-4f81-851b-00cd35f03800",
+      "uuid": "90391c3d-a034-47fe-91bc-59e4d4aa51ef",
       "importer": "buffer",
       "name": "buffer.bin",
       "subMetas": {}
     },
-    "等边三角形1m.mesh": {
+    "等边三角形.mesh": {
       "ver": "1.0.3",
-      "uuid": "e077b6e4-3b62-4c79-a22b-2aa4bd88ef76",
+      "uuid": "1ca7b8dd-e923-410c-b47d-51540d6877b7",
       "importer": "mesh",
-      "verts": 18,
-      "tris": 8,
+      "verts": 72,
+      "tris": 80,
       "submeshes": 1,
       "attributes": [
         [
@@ -29,21 +29,21 @@
         ]
       ],
       "minPos": {
-        "x": -0.433012843132019,
-        "y": -0.50000011920929,
+        "x": -0.422187656164169,
+        "y": -0.481250137090683,
         "z": 0
       },
       "maxPos": {
-        "x": 0.433012843132019,
-        "y": 0.499999672174454,
+        "x": 0.42218741774559,
+        "y": 0.481249690055847,
         "z": 0.295112609863281
       },
-      "name": "等边三角形1m.mesh",
+      "name": "等边三角形.mesh",
       "subMetas": {}
     },
-    "等边三角形1m.prefab": {
+    "等边三角形.prefab": {
       "ver": "1.3.2",
-      "uuid": "910b2915-44fe-491f-a90b-439eb4ee186a",
+      "uuid": "40967070-c378-4752-8ca4-44e0309f5c56",
       "importer": "prefab",
       "optimizationPolicy": "AUTO",
       "asyncLoadAssets": false,
@@ -157,15 +157,15 @@
           "fileId": "d7118yAG5lKybkFOAh8koPL"
         }
       ],
-      "name": "等边三角形1m.prefab",
+      "name": "等边三角形.prefab",
       "subMetas": {}
     },
-    "Material #25.mtl": {
+    "Material #38.mtl": {
       "ver": "1.0.5",
-      "uuid": "4d81f135-e5d9-409b-b967-3b0d753d7239",
+      "uuid": "005acde8-0e41-4a02-be47-a6262d898a2c",
       "importer": "material",
-      "dataAsSubAsset": "{\n  \"__type__\": \"cc.Material\",\n  \"_name\": \"\",\n  \"_objFlags\": 0,\n  \"_native\": \"\",\n  \"_effectAsset\": {\n    \"__uuid__\": \"6d91e591-4ce0-465c-809f-610ec95019c6\"\n  },\n  \"_techniqueIndex\": 0,\n  \"_techniqueData\": {\n    \"0\": {\n      \"props\": {\n        \"diffuseColor\": {\n          \"__type__\": \"cc.Color\",\n          \"r\": 149,\n          \"g\": 149,\n          \"b\": 149,\n          \"a\": 255\n        }\n      },\n      \"defines\": {}\n    }\n  }\n}",
-      "name": "Material #25.mtl",
+      "dataAsSubAsset": null,
+      "name": "Material #38.mtl",
       "subMetas": {}
     }
   }

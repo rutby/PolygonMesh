@@ -164,7 +164,7 @@
       "ver": "1.0.5",
       "uuid": "7905a16a-eb64-49ca-ac25-61d3b1ac5179",
       "importer": "material",
-      "dataAsSubAsset": "{\n  \"__type__\": \"cc.Material\",\n  \"_name\": \"\",\n  \"_objFlags\": 0,\n  \"_native\": \"\",\n  \"_effectAsset\": {\n    \"__uuid__\": \"abc2cb62-7852-4525-a90d-d474487b88f2\"\n  },\n  \"_techniqueIndex\": 0,\n  \"_techniqueData\": {\n    \"0\": {\n      \"props\": {\n        \"diffuseColor\": {\n          \"__type__\": \"cc.Color\",\n          \"r\": 149,\n          \"g\": 149,\n          \"b\": 149,\n          \"a\": 255\n        }\n      },\n      \"defines\": {}\n    }\n  }\n}",
+      "dataAsSubAsset": "{\n  \"__type__\": \"cc.Material\",\n  \"_name\": \"\",\n  \"_objFlags\": 0,\n  \"_native\": \"\",\n  \"_effectAsset\": {\n    \"__uuid__\": \"6d91e591-4ce0-465c-809f-610ec95019c6\"\n  },\n  \"_techniqueIndex\": 0,\n  \"_techniqueData\": {\n    \"0\": {\n      \"props\": {\n        \"diffuseColor\": {\n          \"__type__\": \"cc.Color\",\n          \"r\": 149,\n          \"g\": 149,\n          \"b\": 149,\n          \"a\": 255\n        }\n      },\n      \"defines\": {}\n    }\n  }\n}",
       "name": "Material #25.mtl",
       "subMetas": {}
     }
