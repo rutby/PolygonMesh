@@ -21,6 +21,7 @@ class MeshPlane {
 interface MeshPoly {
     vert: cc.Vec2,
     normal: cc.Vec2,
+    inner: cc.Vec2,
 }
 
 export class PrimitiveUtils {
@@ -164,7 +165,7 @@ export class PrimitiveUtils {
             planes[0].normals.push(cc.v3(0, 0, 1));
             planes[1].normals.push(cc.v3(0, 0, -1));
 
-            // /** 法线 - 圆角 */
+            /** 法线 - 圆角 */
             // planes[0].normals.push(cc.v3(meshPolys[i].normal.x, meshPolys[i].normal.y, 0));
             // planes[1].normals.push(cc.v3(meshPolys[i].normal.x, meshPolys[i].normal.y, 0));
         };
@@ -250,6 +251,7 @@ export class PrimitiveUtils {
             let vv = pv.sub(p0).normalize();
             let radian = vv.angle(vu) / 2;
             let dis = roundness / Math.cos(radian);
+            let radius = dis * Math.sin(radian);
             let vin = vu.add(vv).normalize();
             let vi = vin.mul(dis);
             let posInner = p0.add(vi);
@@ -262,16 +264,20 @@ export class PrimitiveUtils {
                 let ps0 = p0.add(u.mul(ic / count));
                 let ps1 = p0.add(v.mul(ic / count));
 
-                seg0.push({ vert: ps0, normal: cc.v2(vu.y, -vu.x) });
-                seg1.push({ vert: ps1, normal: cc.v2(-vv.y, vv.x) });
+                seg0.push({ vert: ps0, normal: cc.v2(vu.y, -vu.x), inner: posInner });
+                seg1.push({ vert: ps1, normal: cc.v2(-vv.y, vv.x), inner: posInner });
             }
+            /** prev */
             seg1 = seg1.reverse();
             if (i == 0) {
                 trail = seg1;
             } else {
                 verts = verts.concat(seg1);
             }
-            verts.push({ vert: p0, normal: vin.negate() });
+            /** cuur */
+            let normal = vin.negate();
+            verts.push({ vert: posInner.add(normal.mul(radius)), normal: normal, inner: posInner });
+            /** post */
             verts = verts.concat(seg0);
         }
         verts = verts.concat(trail);
